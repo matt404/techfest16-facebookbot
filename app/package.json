@@ -1,0 +1,26 @@
+{
+  "name": "techfest16-facebookbot",
+  "version": "1.0.0",
+  "description": "Techfest 2016 Hackathon - Facebook Bot App",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "lint": "jshint --exclude node_modules .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/matt404/techfest16-facebookbot"
+  },
+  "author": "matt404",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "config": "^1.20.4",
+    "ejs": "^2.4.2",
+    "express": "^4.13.4",
+    "request": "^2.72.0"
+  },
+  "engines": {
+    "node": "~4.1.2"
+  }
+}
