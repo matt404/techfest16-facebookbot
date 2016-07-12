@@ -7,4 +7,3 @@ Hackathon Team Members
  - John Lewis
  - Federico Raggi
  - Stephen McQuaid
-# techfest16-facebookbot
