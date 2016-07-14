@@ -370,10 +370,14 @@ function receivedMessage(event) {
   }
 
   if (messageText) {
+    var domainMatch = /([a-zA-Z0-9]+\.[a-zA-Z]+)/;
+    var found = messageText.match(domainMatch);
 
-    if(messageText.toLowerCase().indexOf("search") > -1){
-      var domainSearch = messageText;
+    if(found && found.length > 0){
+
+      var domainSearch = found[0];
       searchDomainAvailability(senderID, domainSearch);
+
     }else{
 
       // If we receive a text message, check to see if it matches any special
