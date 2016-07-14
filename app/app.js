@@ -166,9 +166,9 @@ function searchDomainAvailability(senderID, domainSearch){
     function(rsp){
       if(rsp && rsp.ExactMatchDomain){
         if(rsp.ExactMatchDomain.IsAvailable){
-          sendDomainBuyMessage(senderID);
+          sendDomainBuyMessage(senderID, domainSearch);
         }else{
-          var messageText = "Sorry, that domain isn't available.";
+          var messageText = "Sorry, "+domainSearch+" is not available.";
           sendTextMessage(senderID, messageText);
         }
       }
@@ -221,7 +221,7 @@ function httpsReq(host, endpoint, method, data, success) {
  * Send a domain search result using the Send API.
  *
  */
-function sendDomainBuyMessage(recipientId) {
+function sendDomainBuyMessage(recipientId, domainSearch) {
   var messageData = {
     recipient: {
       id: recipientId
@@ -231,7 +231,7 @@ function sendDomainBuyMessage(recipientId) {
         type: "template",
         payload: {
           template_type: "button",
-          text: "Your domain is available!",
+          text: "YES, "+domainSearch+" is available!",
           buttons:[{
             type: "web_url",
             url: config.get('cartURL'),
@@ -242,7 +242,7 @@ function sendDomainBuyMessage(recipientId) {
             payload: "DEVELOPED_DEFINED_PAYLOAD"
           }, {
             type: "phone_number",
-            title: "Call To Buy",
+            title: "Give Us A Call",
             payload: "+14805058877"
           }]
         }
@@ -374,6 +374,7 @@ function receivedMessage(event) {
     var found = messageText.match(domainMatch);
 
     if(found && found.length > 0){
+      sendTextMessage(senderID, "Ok, checking availability...");
 
       var domainSearch = found[0];
       searchDomainAvailability(senderID, domainSearch);
