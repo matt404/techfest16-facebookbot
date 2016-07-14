@@ -181,7 +181,7 @@ function httpsReq(host, endpoint, method, data, success) {
   var headers = {};
 
   if (method == 'GET') {
-    endpoint += '?' + querystring.stringify(data);
+    endpoint += '?' + data;
   }
   else {
     headers = {
