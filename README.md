@@ -1,13 +1,25 @@
 # Tech Fest 2016 Hackathon - Facebook Bot
 
-Hackathon Team Members
- - Matt Wilson
- - David Meyer
- - Jesse Bilsten
- - John Lewis
- - Federico Raggi
- - Stephen McQuaid
+## Hackathon Team Members
+- Matt Wilson
+- David Meyer
+- Jesse Bilsten
+- John Lewis
+- Federico Raggi
+- Stephen McQuaid
 
+## Development Steps
+
+1. Merge updates into master branch
+2. SSH to the server and execute the following:
+3. `cd ~/techfest16-facebookbot`
+4. `git pull`
+5. `cd app`
+6. `npm start`
+7. Now log into facebook and go to the 'gdtestbot' page.
+8. Open the messenger and chat away!
+
+## Additional Notes
  APIs to Integrate with:
  - Domain Search
  -- https://www.godaddy.com/domainsapi/v1/search/exact?q=bottertesticon.com&key=dpp_search&pc=&ptl=
