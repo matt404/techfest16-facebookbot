@@ -4,7 +4,7 @@
 - Matt Wilson
 - David Meyer
 - Jesse Bilsten
-- John Lewis
+- Adam Marsh
 - Federico Raggi
 - Stephen McQuaid
 
