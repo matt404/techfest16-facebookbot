@@ -271,43 +271,6 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid) {
   callSendAPI(messageData);
 }
 
-/*
- * Send a domain search result using the Send API.
- *
- */
-function sendDomainBuyMessage(recipientId, domain) {
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "button",
-          text: "YES, "+domain+" is your!",
-          buttons:[{
-            type: "web_url",
-            url: config.get('cartURL'),
-            title: "Buy Domain"
-          }, {
-            type: "postback",
-            title: "Search Similar",
-            payload: "DEVELOPED_DEFINED_PAYLOAD"
-          }, {
-            type: "phone_number",
-            title: "Give Us A Call",
-            payload: "+14805058877"
-          }]
-        }
-      }
-    }
-  };
-
-  callSendAPI(messageData);
-}
-
-
 
 /**********************************************************
 ***********************************************************
