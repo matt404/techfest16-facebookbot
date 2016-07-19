@@ -156,19 +156,17 @@ app.get('/authorize', function(req, res) {
 ***********************************************************
 **********************************************************/
 
-app.get('/loadvcart', function(req, res) {
-
-  res.render('loadvcart');
-
-});
-
 app.get('/buy-domain', function(req, res) {
   var pfid = req.query['pfid'];
   var domain = req.query['domain'];
+  var senderId = req.query['senderId'];
+  var path = encodeURIComponent("/send-message" + "?domain=" + domain +"&senderId=" + senderId);
 
   res.render('buy-domain', {
     pfid: pfid,
-    domain: domain
+    domain: domain,
+    senderId: senderId,
+    path: path
   });
 });
 
@@ -237,7 +235,7 @@ function httpsReq(host, endpoint, method, data, success) {
 
 
 /*
- * Send a domain search result using the Send API.
+ * Send a order confirmation for the domain using the Send API.
  *
  */
 function sendDomainBuyMessage(recipientId, domainSearch) {
@@ -271,6 +269,43 @@ function sendDomainBuyMessage(recipientId, domainSearch) {
 
   callSendAPI(messageData);
 }
+
+/*
+ * Send a domain search result using the Send API.
+ *
+ */
+function sendDomainBuyMessage(recipientId, domain) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "button",
+          text: "YES, "+domain+" is your!",
+          buttons:[{
+            type: "web_url",
+            url: config.get('cartURL'),
+            title: "Buy Domain"
+          }, {
+            type: "postback",
+            title: "Search Similar",
+            payload: "DEVELOPED_DEFINED_PAYLOAD"
+          }, {
+            type: "phone_number",
+            title: "Give Us A Call",
+            payload: "+14805058877"
+          }]
+        }
+      }
+    }
+  };
+
+  callSendAPI(messageData);
+}
+
 
 
 /**********************************************************
