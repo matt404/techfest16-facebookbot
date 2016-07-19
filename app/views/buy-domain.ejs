@@ -1,0 +1,60 @@
+<html>
+
+<head>
+    <title>Buy a GoDaddy Domain</title>
+</head>
+
+<body>
+<div class="container">
+
+    <form method="post" action="https://cart.godaddy.com/upp/vcart" name="inapp">
+  <textarea name="postData" cols="80" rows="20" style="display:none;">
+{
+  "cart": {
+    "items": [
+    {
+      "pfid": <%= pfid %>,
+      "quantity": 1,
+      "metadata": {
+        "domains": [
+          {
+            "domain": "<%= domain %>",
+            "nameServers": [
+              "ns13.domaincontrol.com",
+              "ns14.domaincontrol.com"
+            ],
+            "renewAuto": true,
+            "inheritContacts": true
+          }
+        ]
+      }
+    }
+    ],
+    "tracking": {
+      "itemTrackingCode": "inapp",
+      "clientIp": "64.202.160.73"
+    }
+  },
+  "navigation": {
+    "manageProduct": {
+      "isHidden": false,
+      "app": "hackaton",
+      "path": "/send-message",
+      "buttonText": "Go Back"
+    }
+  }
+}
+  </textarea>
+    </form>
+
+    <script>
+        window.onload = function () {
+            document.forms['inapp'].submit()
+        }
+    </script>
+
+</div> <!-- /container -->
+
+</body>
+
+</html>
