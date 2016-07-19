@@ -5,5 +5,5 @@
     "serverURL": "https://sandbox.mgr.cloud/botjesse",
     "domainSearchHost": "www.godaddy.com",
     "domainSearchPath": "/domainsapi/v1/search/exact",
-    "cartURL": "https://cart.godaddy.com/upp/vcart#/"
+    "cartURL": "https://sandbox.mgr.cloud/botjesse/buy-domain"
 }
