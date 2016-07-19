@@ -1,0 +1,9 @@
+{
+    "appSecret": "707328345d64cc74a2ba12aafa1c4037",
+    "pageAccessToken": "EAAOq6wfo5zIBAMqgyDHJrC2SxX3XJBrFXqYrkUlljKDsIYy6I88JFZBPAtr8izjWLESfrI2H2EYab25uYBRZBk9ZCFPprh12ZBR3DpxLLIQKZCA35ky7uLZAyDOzcoELnPvxaZCZB1ingSRsuGZBzRratycXRF3rdXd5ZCZBkZCZANlbW6gZABUlKgs8bi",
+    "validationToken": "gd_bottest_token",
+    "serverURL": "https://sandbox.mgr.cloud/botdavid",
+    "domainSearchHost": "www.godaddy.com",
+    "domainSearchPath": "/domainsapi/v1/search/exact",
+    "cartURL": "https://cart.godaddy.com/upp/vcart#/"
+}
