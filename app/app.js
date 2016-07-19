@@ -162,6 +162,16 @@ app.get('/loadvcart', function(req, res) {
 
 });
 
+app.get('/buy-domain', function(req, res) {
+  var pfid = req.query['pfid'];
+  var domain = req.query['domain'];
+
+  res.render('buy-domain', {
+    pfid: pfid,
+    domain: domain
+  });
+});
+
 
 function searchDomainAvailability(senderID, domainSearch){
 
