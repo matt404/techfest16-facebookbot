@@ -16,8 +16,10 @@ const
   crypto = require('crypto'),
   express = require('express'),
   https = require('https'),
-  request = require('request');
+  request = require('request'),
+  NodeCache = require('node-cache');
 
+var nCache = new NodeCache( { stdTTL: 100, checkperiod: 120 } );
 var app = express();
 app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
@@ -87,6 +89,8 @@ app.get('/webhook', function(req, res) {
 app.post('/webhook', function (req, res) {
   var data = req.body;
 
+  sendReceiptMessage(senderID);
+
   // Make sure this is a page subscription
   if (data.object == 'page') {
     // Iterate over each entry
@@ -153,6 +157,13 @@ app.get('/authorize', function(req, res) {
 ***********************************************************
 ***********************************************************
 **********************************************************/
+
+app.get('/loadvcart', function(req, res) {
+
+  res.render('loadvcart');
+
+});
+
 
 function searchDomainAvailability(senderID, domainSearch){
 
@@ -433,7 +444,8 @@ function receivedMessage(event) {
           sendTypingOff(senderID);
           break;
 
-        case 'account linking':
+          case 'account linking':
+          case 'link':
           sendAccountLinking(senderID);
           break;
 
