@@ -5,5 +5,6 @@
     "serverURL": "https://sandbox.mgr.cloud/botadam",
     "domainSearchHost": "www.godaddy.com",
     "domainSearchPath": "/domainsapi/v1/search/exact",
-    "cartURL": "https://cart.godaddy.com/upp/vcart#/"
+    "cartURL": "https://cart.godaddy.com/upp/vcart#/",
+    "port": "5002"
 }
