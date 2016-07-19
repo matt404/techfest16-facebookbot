@@ -183,7 +183,7 @@ function searchDomainAvailability(senderID, domainSearch){
     function(rsp){
       if(rsp && rsp.ExactMatchDomain){
         if(rsp.ExactMatchDomain.IsAvailable){
-          sendDomainBuyMessage(senderID, domainSearch);
+          sendDomainBuyMessage(senderID, domainSearch, rsp.ExactMatchDomain.ProductId);
         }else{
           var messageText = "Sorry, "+domainSearch+" is not available.";
           sendTextMessage(senderID, messageText);
@@ -238,7 +238,8 @@ function httpsReq(host, endpoint, method, data, success) {
  * Send a order confirmation for the domain using the Send API.
  *
  */
-function sendDomainBuyMessage(recipientId, domainSearch) {
+function sendDomainBuyMessage(recipientId, domainSearch, pfid) {
+  var qstring = "?pfid="+pfid+"&domain="+domainSearch+"&senderid="+recipientId
   var messageData = {
     recipient: {
       id: recipientId
@@ -251,7 +252,7 @@ function sendDomainBuyMessage(recipientId, domainSearch) {
           text: "YES, "+domainSearch+" is available!",
           buttons:[{
             type: "web_url",
-            url: config.get('cartURL'),
+            url: config.get('cartURL') + qstring,
             title: "Buy Domain"
           }, {
             type: "postback",
