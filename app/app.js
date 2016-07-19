@@ -21,7 +21,7 @@ const
 
 var nCache = new NodeCache( { stdTTL: 100, checkperiod: 120 } );
 var app = express();
-app.set('port', config.get('port') || 5000);
+app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
 app.use(bodyParser.json({ verify: verifyRequestSignature }));
 app.use(express.static('public'));
