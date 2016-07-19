@@ -1,0 +1,9 @@
+{
+    "appSecret": "824b8b12a27ac6a2297b0aead793f100",
+    "pageAccessToken": "EAAWq9ian0MYBAMT4DdtH3kO2AgPlvp7D0InNREu7hmqIzzTMBDxyDaZBUYrtMzsOIKh3lPNJ0it9T9Pgzsez4NZCW9u70E7maXgjT7kB9NaK47FyRxAZCFtkDrJLdv5QWrcvdAyNi4ZAZAZCIABzZBDJEkSR6FUqxjfMr1voflZBDd75f0XSaBzg",
+    "validationToken": "gd_bottest_token",
+    "serverURL": "https://sandbox.mgr.cloud/botsteve",
+    "domainSearchHost": "www.godaddy.com",
+    "domainSearchPath": "/domainsapi/v1/search/exact",
+    "cartURL": "https://sandbox.mgr.cloud/botsteve/buy-domain"
+}
