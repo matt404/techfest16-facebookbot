@@ -249,7 +249,7 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, price) {
         type: "template",
         payload: {
           template_type: "button",
-          text: "YES, "+domainSearch+" is available! Plans starting from "+price,
+          text: "<b>YES</b>, "+domainSearch+" is available! Plans starting from " +price+ "!",
           buttons:[{
             type: "web_url",
             url: config.get('cartURL') + qstring,
