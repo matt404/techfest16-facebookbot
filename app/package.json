@@ -5,6 +5,11 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "adamStart": "PORT=5002 NODE_ENV=amarsh node app.js",
+    "mattStart": "PORT=5001 NODE_ENV=matt node app.js",
+    "federStart": "PORT=5003 NODE_ENV=feder node app.js",
+    "davidStart": "PORT=5004 NODE_ENV=david node app.js",
+    "jesseStart": "PORT=5005 NODE_ENV=jesse node app.js",
     "lint": "jshint --exclude node_modules .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
