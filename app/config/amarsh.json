@@ -1,0 +1,9 @@
+{
+    "appSecret": "67cc6067b65598e8847be34eebe398b3",
+    "pageAccessToken": "EAAEaVxmEVmcBAHunQ2nKOO4AwRtsmJKbxDYZA68xCvWhQQLaZAYJFCkhZBV1YjzgV7vDsr5oWjtLT2KctNFS4D5XYg3WtNr5skxJ8ZBD8UoodKfRljV1CYC2vphB9QBYr9KZCFQe0cnGhpg8m9JZBMUfRJ9v5XmUoAifVVWepmOAZDZD",
+    "validationToken": "gd_bottest_token",
+    "serverURL": "https://sandbox.mgr.cloud/botadam",
+    "domainSearchHost": "www.godaddy.com",
+    "domainSearchPath": "/domainsapi/v1/search/exact",
+    "cartURL": "https://cart.godaddy.com/upp/vcart#/"
+}
