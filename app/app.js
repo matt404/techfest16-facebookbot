@@ -588,7 +588,7 @@ function receivedMessage(event) {
       if(atts[0].type === "image"){
        var imageURL = atts[0].payload.url;
        console.log(imageURL);
-       receivedImage(messagingEvent, imageURL);
+       receivedImage(event, imageURL);
       }
     } else {
       sendTextMessage(senderID, "Message with attachment received");
