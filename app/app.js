@@ -186,11 +186,13 @@ function searchDomainAvailability(senderID, domainSearch){
           sendDomainBuyMessage(senderID, domainSearch, rsp.ExactMatchDomain.ProductId, rsp.Products[0].PriceInfo.ListPriceDisplay, rsp.Products[0].PriceInfo.PromoRegLengthFlag, rsp.Products[0].PriceInfo.CurrentPriceDisplay);
         }else{
           var domainSpins = getDomainSpins(senderID, domainSearch);
-          sendTextMessage(senderID, "domainspins:"+domainSpins);
+          sendTextMessage(senderID, "domainspins:"+domainSpins); // debug
           if( domainSpins ){
             sendDomainSpinMessage(senderID, domainSearch, domainSpins, pfid);
           }else{
+            // debug
             sendTextMessage(senderID, "no domain spins");
+            return;
           }
         }
       }
@@ -208,6 +210,7 @@ function getDomainSpins(senderID, domainSearch){
     "GET",
     domainSpinQS,
     function(rsp){
+      sendTextMessage(senderID, rsp.RecommendedDomains[0].Fqdn);
       if(rsp && rsp.RecommendedDomains && rsp.RecommendedDomains.length >= 1 ){
         return rsp.RecommendedDomains;
       } else {
