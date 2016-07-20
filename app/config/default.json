@@ -5,5 +5,6 @@
     "serverURL": "https://sandbox.mgr.cloud/bottest",
     "domainSearchHost": "www.godaddy.com",
     "domainSearchPath": "/domainsapi/v1/search/exact",
-    "cartURL": "https://sandbox.mgr.cloud/bottest/buy-domain"
+    "cartURL": "https://sandbox.mgr.cloud/bottest/buy-domain",
+    "domainSpinPath": "/domainsapi/v1/search/spins",
 }
