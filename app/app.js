@@ -728,6 +728,7 @@ function getImageTags(imageURL){
     endpoint, // config.get('domainSearchHost'),
     data,
     function(rsp){
+      console.log(rsp.toString());
       return rsp.description.tags;
   });
 }
