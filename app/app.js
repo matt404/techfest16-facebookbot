@@ -721,11 +721,12 @@ function compareDomainScore(a,b) {
 function getImageTags(imageURL){
   var host = "api.projectoxford.ai";
   var endpoint = "/vision/v1.0/describe?"
-  var data = "url="+encodeURIComponent(JSON.stringify(imageURL))+"&maxCandidates=1";
+  var data = {url: imageURL, maxCandidates:1};
 
   imageHttpsReq(
     host,
     endpoint, // config.get('domainSearchHost'),
+    "POST"
     data,
     function(rsp){
       console.log(rsp);
@@ -736,17 +737,22 @@ function getImageTags(imageURL){
 function imageHttpsReq(host, endpoint, data, success) {
   console.log(data);
   var dataString = JSON.stringify(data);
+  var headers = {};
 
-  var headers = {
-    'Content-Type': 'application/json',
-    'Content-Length': dataString.length,
-    'ocp-apim-subscription-key': '7bb37f55e5244f1ca61695e8de36042c'
-  };
-
+  if (method == 'GET') {
+    endpoint += '?' + data;
+  }
+  else {
+    headers = {
+      'Content-Type': 'application/json',
+      'Content-Length': dataString.length,
+      'ocp-apim-subscription-key': '7bb37f55e5244f1ca61695e8de36042c'
+    };
+  }
   var options = {
     host: host,
     path: endpoint,
-    method: "POST",
+    method: method,
     headers: headers
   };
 
