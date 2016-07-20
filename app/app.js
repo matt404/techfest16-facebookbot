@@ -726,7 +726,7 @@ function getImageTags(imageURL){
   imageHttpsReq(
     host,
     endpoint, // config.get('domainSearchHost'),
-    "POST"
+    "POST",
     data,
     function(rsp){
       console.log(rsp);
