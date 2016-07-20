@@ -242,7 +242,7 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, length
   var qstring = "?pfid="+pfid+"&domain="+domainSearch+"&senderid="+recipientId
   var subTitleText = listPrice+ "/yr"
   if (lengthFlag > 0) {
-    subTitleText += "\n\rDiscount pricing for multi-year registration: "+currentPrice+" for the first year."
+    subTitleText += "\n\r— Multi-year sale: "+currentPrice+" for 1st year."
   }
   var messageData = {
     recipient: {
