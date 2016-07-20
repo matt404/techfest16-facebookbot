@@ -213,8 +213,10 @@ function getDomainSpins(senderID, domainSearch){
       sendTextMessage(senderID, rsp.RecommendedDomains[0].Fqdn);
       sendTextMessage(senderID, "length spin array"+rsp.RecommendedDomains.length);
       if(rsp && rsp.RecommendedDomains && (rsp.RecommendedDomains.length >= 1) ){
+        sendTextMessage(senderID, "passing logic gates"); 
         return rsp.RecommendedDomains;
       } else {
+        sendTextMessage(senderID, "not passing logic gates");
         return;
       };
     });
