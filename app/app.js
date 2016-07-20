@@ -300,7 +300,7 @@ function sendHelpButtonMessage(recipientId) {
             image_url: SERVER_URL + "/assets/product-domains.png",
             buttons: [{
               type: "phone_number",
-              title: "Give Us A Call",
+              title: "Talk to Support",
               payload: "+14805058877"
             }]
           }]
@@ -345,7 +345,7 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, length
               payload: "DEVELOPED_DEFINED_PAYLOAD"
             }, {
               type: "phone_number",
-              title: "Give Us A Call",
+              title: "Talk to Support",
               payload: "+14805058877"
             }]
           }]
