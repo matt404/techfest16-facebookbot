@@ -295,53 +295,6 @@ function sendDomainSpinMessage(recipientId, domainSearch, domainArray) {
   callSendAPI(messageData);
 }
 
-
-/*
- * Send a order confirmation for the domain using the Send API.
- *
- */
-function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, lengthFlag, currentPrice) {
-  var qstring = "?pfid="+pfid+"&domain="+domainSearch+"&senderid="+recipientId
-  var subTitleText = listPrice+ "/yr"
-  if (lengthFlag > 0) {
-    subTitleText += "\n\r— Multi-year sale: "+currentPrice+" for 1st year."
-  }
-  var messageData = {
-    recipient: {
-      id: recipientId
-    },
-    message: {
-      attachment: {
-        type: "template",
-        payload: {
-          template_type: "generic",
-          elements: [{
-            title: domainSearch,
-            subtitle: subTitleText,
-            image_url: SERVER_URL + "/assets/product-domains.png",
-            buttons: [{
-              type: "web_url",
-              url: config.get('cartURL') + qstring,
-              title: "Add to Cart"
-            }, {
-              type: "text",
-              title: "Search Similar",
-              payload: domainSearch
-            }, {
-              type: "phone_number",
-              title: "Give Us A Call",
-              payload: "+14805058877"
-            }]
-          }]
-        }
-      }
-    }
-  };
-
-  callSendAPI(messageData);
-}
-
-
 /*
  * Send a order confirmation for the domain using the Send API.
  *
