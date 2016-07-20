@@ -675,7 +675,7 @@ function receivedImage(event, imageURL) {
   // The 'payload' param is a developer-defined field which is set in a postback
   // button for Structured Messages.
 
-  sendTextMessage(senderID, "Thanks, processing your image...");
+  sendTextMessage(senderID, "Thanks, finding domains...");
   sendTypingOn(senderID);
   console.log("Received image for user %d and page %d with image '%s'" , senderID, recipientID, imageURL);
 
