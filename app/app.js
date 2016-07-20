@@ -690,13 +690,18 @@ function receivedImage(event, imageURL) {
   getImageTags(
     imageURL,
     function(rsp){
-      var tags = rsp.description.tags;
+      var tags = rsp.tags;
+      tags.sort(compareTagConfidence);
       for (var i = 0; i < tags.length; i++){
-        var spins = [];
         console.log(tags[i]);
+        if (tags.confidence < 0.9){
+          console.log("skipping: "+tags[i].name);
+          continue;
+        }
+        var spins = [];
         getDomainSpins(
           senderID,
-          tags[i],
+          tags[i].name,
           function(rsp2){
             // Find the highest ranked spin within the set
             spins.push(rsp2.RecommendedDomains[0]);
@@ -713,6 +718,15 @@ function receivedImage(event, imageURL) {
   );
 }
 
+function compareTagConfidence(a,b) {
+  if (a.confidence < b.confidence)
+    return -1;
+  if (a.confidence > b.confidence)
+    return 1;
+  return 0;
+}
+
+
 function compareDomainScore(a,b) {
   if (a.DomainScore < b.DomainScore)
     return -1;
@@ -723,8 +737,8 @@ function compareDomainScore(a,b) {
 
 function getImageTags(imageURL, callbackFN){
   var host = "api.projectoxford.ai";
-  var endpoint = "/vision/v1.0/describe?"
-  var data = {url: imageURL, maxCandidates:3};
+  var endpoint = "/vision/v1.0/tag?"
+  var data = {url: imageURL};
 
   return imageHttpsReq(
     host,
