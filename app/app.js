@@ -686,7 +686,7 @@ function receivedImage(event, imageURL) {
   // spins.slice(0,5)
   // sendDomainSpinMessage(senderID, domainArray);
   //
-  function(rsp){
+  (function(rsp){
     var tags = getImageTags(imageURL);
     var spins = [];
     for (i = 0; i < tags.length; i++){
@@ -713,7 +713,7 @@ function receivedImage(event, imageURL) {
     console.log(spins);
     console.log(spins);
     sendDomainSpinMessage(senderID, spins);
-  };
+  };)
 }
 
 function getImageTags(imageURL){
