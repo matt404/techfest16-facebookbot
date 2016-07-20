@@ -284,6 +284,38 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, length
  * Send a order confirmation for the domain using the Send API.
  *
  */
+function sendHelpButtonMessage(recipientId) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: [{
+            title: "Help",
+            subtitle: "Type in a domain to search. Or you can:",
+            image_url: SERVER_URL + "/assets/product-domains.png",
+            buttons: [{
+              type: "phone_number",
+              title: "Talk to Support",
+              payload: "+14805058877"
+            }]
+          }]
+        }
+      }
+    }
+  };
+
+  callSendAPI(messageData);
+}
+
+/*
+ * Send a order confirmation for the domain using the Send API.
+ *
+ */
 function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, lengthFlag, currentPrice) {
   var qstring = "?pfid="+pfid+"&domain="+domainSearch+"&senderid="+recipientId
   var subTitleText = listPrice+ "/yr"
@@ -313,7 +345,7 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, length
               payload: "DEVELOPED_DEFINED_PAYLOAD"
             }, {
               type: "phone_number",
-              title: "Give Us A Call",
+              title: "Talk to Support",
               payload: "+14805058877"
             }]
           }]
@@ -500,7 +532,7 @@ function receivedMessage(event) {
           break;
 
         case 'help':
-          sendTextMessage(senderID, "Type in a domain and see if it's available!")
+          sendHelpButtonMessage(senderID)
           break;
 
         case 'typing on':
