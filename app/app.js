@@ -183,7 +183,7 @@ function searchDomainAvailability(senderID, domainSearch){
     function(rsp){
       if(rsp && rsp.ExactMatchDomain){
         if(rsp.ExactMatchDomain.IsAvailable){
-          sendDomainBuyMessage(senderID, domainSearch, rsp.ExactMatchDomain.ProductId);
+          sendDomainBuyMessage(senderID, domainSearch, rsp.ExactMatchDomain.ProductId, rsp.Products[0].PriceInfo.ListPriceDisplay, rsp.Products[0].PriceInfo.PromoRegLengthFlag, rsp.Products[0].PriceInfo.CurrentPriceDisplay);
         }else{
           var messageText = "Sorry, "+domainSearch+" is not available.";
           sendTextMessage(senderID, messageText);
@@ -238,8 +238,12 @@ function httpsReq(host, endpoint, method, data, success) {
  * Send a order confirmation for the domain using the Send API.
  *
  */
-function sendDomainBuyMessage(recipientId, domainSearch, pfid) {
+function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, lengthFlag, currentPrice) {
   var qstring = "?pfid="+pfid+"&domain="+domainSearch+"&senderid="+recipientId
+  var subTitleText = listPrice+ "/yr"
+  if (lengthFlag > 0) {
+    subTitleText += "\n\r— Multi-year sale: "+currentPrice+" for 1st year."
+  }
   var messageData = {
     recipient: {
       id: recipientId
@@ -248,20 +252,24 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid) {
       attachment: {
         type: "template",
         payload: {
-          template_type: "button",
-          text: "YES, "+domainSearch+" is available!",
-          buttons:[{
-            type: "web_url",
-            url: config.get('cartURL') + qstring,
-            title: "Buy Domain"
-          }, {
-            type: "postback",
-            title: "Search Similar",
-            payload: "DEVELOPED_DEFINED_PAYLOAD"
-          }, {
-            type: "phone_number",
-            title: "Give Us A Call",
-            payload: "+14805058877"
+          template_type: "generic",
+          elements: [{
+            title: domainSearch,
+            subtitle: subTitleText,
+            image_url: SERVER_URL + "/assets/product-domains.png",
+            buttons: [{
+              type: "web_url",
+              url: config.get('cartURL') + qstring,
+              title: "Add to Cart"
+            }, {
+              type: "postback",
+              title: "Search Similar",
+              payload: "DEVELOPED_DEFINED_PAYLOAD"
+            }, {
+              type: "phone_number",
+              title: "Give Us A Call",
+              payload: "+14805058877"
+            }]
           }]
         }
       }
