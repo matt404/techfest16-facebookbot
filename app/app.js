@@ -681,7 +681,22 @@ function receivedPostback(event) {
 
   // When a postback is called, we'll send a message back to the sender to
   // let them know it was successful
-  sendTextMessage(senderID, "Postback called");
+  var domainSearch = /([a-zA-Z0-9]+\.[a-zA-Z]+)/;
+  if (payload.match(domainMatch)){
+    getDomainSpins(
+      senderID,
+      domainSearch,
+      function(rsp){
+        var domainSpins = rsp.RecommendedDomains;
+        if( domainSpins ){
+          sendDomainSpinMessage(senderID, domainSearch, domainSpins);
+        }else{
+          sendTextMessage(senderID, "Sorry could not find similar domains");
+        }
+    });
+  } else {
+    sendTextMessage(senderID, "Postback called");
+  }
 }
 
 /*
