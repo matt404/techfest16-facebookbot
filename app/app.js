@@ -734,7 +734,7 @@ function getImageTags(imageURL){
   });
 }
 
-function imageHttpsReq(host, endpoint, data, success) {
+function imageHttpsReq(host, endpoint, method, data, success) {
   console.log(data);
   var dataString = JSON.stringify(data);
   var headers = {};
