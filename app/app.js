@@ -186,7 +186,7 @@ function searchDomainAvailability(senderID, domainSearch){
           sendDomainBuyMessage(senderID, domainSearch, rsp.ExactMatchDomain.ProductId, rsp.Products[0].PriceInfo.ListPriceDisplay, rsp.Products[0].PriceInfo.PromoRegLengthFlag, rsp.Products[0].PriceInfo.CurrentPriceDisplay);
         }else{
           var domainSpins = getDomainSpins(senderID, domainSearch);
-          sendTextMessage(senderID, "domainspins:"+domainSpins[0].Fqdn); // debug
+          // sendTextMessage(senderID, "domainspins:"+domainSpins[0].Fqdn); // debug
           if( domainSpins ){
             sendDomainSpinMessage(senderID, domainSearch, domainSpins, pfid);
           }else{
