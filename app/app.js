@@ -719,10 +719,12 @@ function compareDomainScore(a,b) {
 }
 
 function getImageTags(imageURL){
-  var endpoint = "https://api.projectoxford.ai/vision/v1.0/describe?";
+  var host = "api.projectoxford.ai";
+  var endpoint = "/vision/v1.0/describe?"
   var data = "url="+imageURL+"&maxCandidates=1";
 
   imageHttpsReq(
+    host,
     endpoint, // config.get('domainSearchHost'),
     data,
     function(rsp){
