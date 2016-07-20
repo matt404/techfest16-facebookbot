@@ -720,7 +720,7 @@ function compareDomainScore(a,b) {
 
 function getImageTags(imageURL){
   var endpoint = "https://api.projectoxford.ai/vision/v1.0/describe?";
-  var data = "url="+imageURL+"&maxCandidates="+1;
+  var data = "url="+imageURL+"&maxCandidates=1";
 
   imageHttpsReq(
     endpoint, // config.get('domainSearchHost'),
@@ -731,6 +731,7 @@ function getImageTags(imageURL){
 }
 
 function imageHttpsReq(host, endpoint, data, success) {
+  console.log(data);
   var dataString = JSON.stringify(data);
 
   var headers = {
