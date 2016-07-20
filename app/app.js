@@ -324,9 +324,9 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, length
               url: config.get('cartURL') + qstring,
               title: "Add to Cart"
             }, {
-              type: "postback",
+              type: "text",
               title: "Search Similar",
-              payload: "DEVELOPED_DEFINED_PAYLOAD"
+              payload: "Search Similar: "+domainSearch
             }, {
               type: "phone_number",
               title: "Give Us A Call",
@@ -546,6 +546,19 @@ function receivedMessage(event) {
 
     }else if (messageText.toLowerCase() == "hello" || messageText.toLowerCase() == "hi"){
       sendTextMessage(senderID, "Hi! I'll help you find a domain. Type one and let's see if it's available!")
+    }else if (messageText.match( /(Search\sSimilar\:\s[a-zA-Z0-9]+\.[a-zA-Z]+)/ )){
+      getDomainSpins(
+        senderID,
+        domainSearch,
+        function(rsp){
+          var domainSpins = rsp.RecommendedDomains;
+          sendTextMessage(senderID, "Sorry, "+domainSearch+" is not available. Would you like one of these instead?");
+          if( domainSpins ){
+            sendDomainSpinMessage(senderID, domainSearch, domainSpins);
+          }else{
+            return;
+          }
+      });
     }
     else{
 
