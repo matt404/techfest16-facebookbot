@@ -731,7 +731,7 @@ function getImageTags(imageURL, callbackFN){
     endpoint, // config.get('domainSearchHost'),
     "POST",
     data,
-    function(rsp){
+    function(rsp, callbackFN){
       console.log(rsp);
       callbackFN;
   });
