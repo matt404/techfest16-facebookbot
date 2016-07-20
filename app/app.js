@@ -704,6 +704,7 @@ function receivedImage(event, imageURL) {
           tags[i].name,
           function(rsp2){
             // Find the highest ranked spin within the set
+            console.log("spins: "+rsp2.RecommendedDomains);
             spins.push(rsp2.RecommendedDomains[0]);
             spins.sort(compareDomainScore);
             // this means we are done
