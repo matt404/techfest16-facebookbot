@@ -732,7 +732,7 @@ function getImageTags(imageURL, callbackFN){
     "POST",
     data,
     callbackFN(rsp);
-  });
+  );
 }
 
 function imageHttpsReq(host, endpoint, method, data, success) {
