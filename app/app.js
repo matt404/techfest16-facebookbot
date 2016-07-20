@@ -116,6 +116,7 @@ app.post('/webhook', function (req, res) {
           if(atts[0].type === "image"){
            var imageURL = atts[0].payload.url;
            console.log(imageURL);
+           receivedImage(messagingEvent, imageURL);
           }
         } else {
           console.log("Webhook received unknown messagingEvent: ", messagingEvent);
@@ -198,7 +199,7 @@ function searchDomainAvailability(senderID, domainSearch){
               var domainSpins = rsp.RecommendedDomains;
               sendTextMessage(senderID, "Sorry, "+domainSearch+" is not available. Would you like one of these instead?");
               if( domainSpins ){
-                sendDomainSpinMessage(senderID, domainSearch, domainSpins);
+                sendDomainSpinMessage(senderID, domainSpins);
               }else{
                 return;
               }
@@ -263,7 +264,7 @@ function httpsReq(host, endpoint, method, data, success) {
   req.end();
 }
 
-function sendDomainSpinMessage(recipientId, domainSearch, domainArray) {
+function sendDomainSpinMessage(recipientId, domainArray) {
   var messageData = {
     recipient: {
       id: recipientId
@@ -513,7 +514,7 @@ function receivedMessage(event) {
           var domainSpins = rsp.RecommendedDomains;
           sendTextMessage(senderID, "Sorry, "+domainSearch+" is not available. Would you like one of these instead?");
           if( domainSpins ){
-            sendDomainSpinMessage(senderID, domainSearch, domainSpins);
+            sendDomainSpinMessage(senderID, domainSpins);
           }else{
             return;
           }
@@ -648,7 +649,7 @@ function receivedPostback(event) {
       function(rsp){
         var domainArray = rsp.RecommendedDomains;
         if( domainArray ){
-          sendDomainSpinMessage(senderID, payload, domainArray);
+          sendDomainSpinMessage(senderID, domainArray);
         }else{
           sendTextMessage(senderID, "Sorry could not find similar domains");
         }
@@ -656,6 +657,106 @@ function receivedPostback(event) {
   } else {
     sendTextMessage(senderID, "Postback called");
   }
+}
+
+/*
+ * Image Event
+ *
+ * This event is called when an image is recieved
+ *
+ */
+function receivedImage(event, imageURL) {
+  var senderID = event.sender.id;
+  var recipientID = event.recipient.id;
+  var timeOfImage = event.timestamp;
+
+  // The 'payload' param is a developer-defined field which is set in a postback
+  // button for Structured Messages.
+
+
+  console.log("Received image for user %d and page %d with image '%s' " +
+    "at %d", senderID, recipientID, imageURL, timeOfPostback);
+
+  // When an image is sent, we'll try to search for spins
+  // getImageTags();
+  // for tag in tags:
+  //   spins.push(getTopSpin())
+  //
+  // spins.sort()
+  // spins.slice(0,5)
+  // sendDomainSpinMessage(senderID, domainArray);
+  //
+  function(rsp){
+    var tags = getImageTags(imageURL);
+    var spins = [];
+    for (i = 0; i < tags.length; i++){
+      console.log(tags[i]);
+      spins.push(
+        function(i) {
+          return getDomainSpins(
+            senderID,
+            tags[i],
+            function(rsp){}
+        ));
+      };
+    };
+    spins.sort();
+    spins.slice(0,5);
+    console.log(spins);
+    console.log(spins);
+    sendDomainSpinMessage(senderID, spins);
+}
+
+function getImageTags(imageURL){
+  var endpoint = "https://api.projectoxford.ai/vision/v1.0/describe?"
+  var data =
+  {
+    maxCandidates: 3,
+    url: imageURL
+  }
+
+  imageHttpsReq(
+    endpoint, // config.get('domainSearchHost'),
+    data,
+    function(rsp){
+      return rsp.description.tags;
+  });
+}
+
+function imageHttpsReq(host, endpoint, data, success) {
+  var dataString = JSON.stringify(data);
+
+  var headers = {
+    'Content-Type': 'application/json',
+    'Content-Length': dataString.length
+    'ocp-apim-subscription-key': '7bb37f55e5244f1ca61695e8de36042c'
+  };
+
+  var options = {
+    host: host,
+    path: endpoint,
+    method: POST,
+    headers: headers
+  };
+
+  var req = https.request(options, function(res) {
+    res.setEncoding('utf-8');
+
+    var responseString = '';
+
+    res.on('data', function(data) {
+      responseString += data;
+    });
+
+    res.on('end', function() {
+      //console.log(responseString);
+      var responseObject = JSON.parse(responseString);
+      success(responseObject);
+    });
+  });
+
+  req.write(dataString);
+  req.end();
 }
 
 /*
