@@ -198,7 +198,7 @@ function searchDomainAvailability(senderID, domainSearch){
 
 function getDomainSpins(senderID, domainSearch){
   var pagesize = 3;
-  var domainSpinQS = "pagesize="+pagesize+"&q="+domainSpin+"&key=dpp_search";
+  var domainSpinQS = "pagesize="+pagesize+"&q="+domainSearch+"&key=dpp_search";
 
   httpsReq(
     config.get('domainSearchHost'),
