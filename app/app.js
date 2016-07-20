@@ -250,7 +250,7 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, price) {
         payload: {
           template_type: "generic",
           elements: [{
-            title: "YES, "+domainSearch+" is available!",
+            title: domainSearch,
             subtitle: "Plans starting from " +price+ "!",
             image_url: SERVER_URL + "/assets/product_domains.png",
             buttons: [{
