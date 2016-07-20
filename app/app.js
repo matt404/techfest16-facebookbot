@@ -185,13 +185,37 @@ function searchDomainAvailability(senderID, domainSearch){
         if(rsp.ExactMatchDomain.IsAvailable){
           sendDomainBuyMessage(senderID, domainSearch, rsp.ExactMatchDomain.ProductId, rsp.Products[0].PriceInfo.ListPriceDisplay, rsp.Products[0].PriceInfo.PromoRegLengthFlag, rsp.Products[0].PriceInfo.CurrentPriceDisplay);
         }else{
-          var messageText = "Sorry, "+domainSearch+" is not available.";
-          sendTextMessage(senderID, messageText);
+          getDomainSpins(
+            senderID,
+            domainSearch,
+            function(rsp){
+              var domainSpins = rsp.RecommendedDomains;
+              sendTextMessage(senderID, "Sorry, "+domainSearch+" is not available. Would you like one of these instead?");
+              if( domainSpins ){
+                sendDomainSpinMessage(senderID, domainSearch, domainSpins);
+              }else{
+                return;
+              }
+          });
         }
       }
     });
 
 }
+
+function getDomainSpins(senderID, domainSearch, callbackFn){
+  var pagesize = 7;
+  var domainSpinQS = "pagestart=0&pagesize="+pagesize+"&q="+domainSearch+"&key=dpp_search";
+
+  httpsReq(
+    config.get('domainSearchHost'),
+    config.get('domainSpinPath'),
+    "GET",
+    domainSpinQS,
+    callbackFn
+  );
+}
+
 
 function httpsReq(host, endpoint, method, data, success) {
   var dataString = JSON.stringify(data);
@@ -231,6 +255,44 @@ function httpsReq(host, endpoint, method, data, success) {
 
   req.write(dataString);
   req.end();
+}
+
+function sendDomainSpinMessage(recipientId, domainSearch, domainArray) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: []
+        }
+      }
+    }
+  };
+
+  for(var i = 0; i < domainArray.length; i++) {
+      var currentDomain = domainArray[i].Fqdn;
+      var pfid = domainArray[i].ProductId;
+      var qstring = "?pfid="+pfid+"&domain="+currentDomain+"&senderid="+recipientId;
+
+      var currentDomainItem = {
+        title: currentDomain,
+        subtitle: "Price stuff here",
+        item_url: config.get('cartURL') + qstring,
+        buttons: [{
+          type: "web_url",
+          url: config.get('cartURL') + qstring,
+          title: "Add to Cart"
+        }],
+      };
+
+      messageData.message.attachment.payload.elements.push(currentDomainItem);
+  };
+
+  callSendAPI(messageData);
 }
 
 
