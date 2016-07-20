@@ -183,7 +183,7 @@ function searchDomainAvailability(senderID, domainSearch){
     function(rsp){
       if(rsp && rsp.ExactMatchDomain){
         if(rsp.ExactMatchDomain.IsAvailable){
-          sendDomainBuyMessage(senderID, domainSearch, rsp.ExactMatchDomain.ProductId, rsp.Products[0].PriceInfo.CurrentPriceDisplay);
+          sendDomainBuyMessage(senderID, domainSearch, rsp.ExactMatchDomain.ProductId, rsp.Products[0].PriceInfo.ListPriceDisplay, rsp.Products[0].PriceInfo.PromoRegLengthFlag, rsp.Products[0].PriceInfo.CurrentPriceDisplay);
         }else{
           var messageText = "Sorry, "+domainSearch+" is not available.";
           sendTextMessage(senderID, messageText);
@@ -238,8 +238,12 @@ function httpsReq(host, endpoint, method, data, success) {
  * Send a order confirmation for the domain using the Send API.
  *
  */
-function sendDomainBuyMessage(recipientId, domainSearch, pfid, price) {
+function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, lengthFlag, currentPrice) {
   var qstring = "?pfid="+pfid+"&domain="+domainSearch+"&senderid="+recipientId
+  var subTitleText = listPrice+ "/yr"
+  if (lengthFlag > 0) {
+    subTitleText += "Discount pricing for multi-year registration: "+currentPrice+" for the first year."
+  }
   var messageData = {
     recipient: {
       id: recipientId
@@ -251,7 +255,7 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, price) {
           template_type: "generic",
           elements: [{
             title: domainSearch,
-            subtitle: "Plans starting from " +price+ "!",
+            subtitle: subTitleText,
             image_url: SERVER_URL + "/assets/product-domains.png",
             buttons: [{
               type: "web_url",
