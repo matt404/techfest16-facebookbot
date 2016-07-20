@@ -185,15 +185,20 @@ function searchDomainAvailability(senderID, domainSearch){
         if(rsp.ExactMatchDomain.IsAvailable){
           sendDomainBuyMessage(senderID, domainSearch, rsp.ExactMatchDomain.ProductId, rsp.Products[0].PriceInfo.ListPriceDisplay, rsp.Products[0].PriceInfo.PromoRegLengthFlag, rsp.Products[0].PriceInfo.CurrentPriceDisplay);
         }else{
-          var domainSpins = getDomainSpins(senderID, domainSearch);
-          // sendTextMessage(senderID, "domainspins:"+domainSpins[0].Fqdn); // debug
-          if( domainSpins ){
-            sendDomainSpinMessage(senderID, domainSearch, domainSpins, pfid);
-          }else{
-            // debug
-            sendTextMessage(senderID, "no domain spins");
-            return;
-          }
+          getDomainSpins(
+            senderID,
+            domainSearch,
+            function(rsp){
+              var domainSpins = rsp.RecommendedDomains;
+              // sendTextMessage(senderID, "domainspins:"+domainSpins[0].Fqdn); // debug
+              if( domainSpins ){
+                sendDomainSpinMessage(senderID, domainSearch, domainSpins, pfid);
+              }else{
+                // debug
+                sendTextMessage(senderID, "no domain spins");
+                return;
+              }
+          });
         }
       }
     });
