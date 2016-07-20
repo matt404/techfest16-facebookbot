@@ -689,7 +689,7 @@ function receivedImage(event, imageURL) {
   //
   var tags = getImageTags(imageURL);
   var spins = [];
-  for (i = 0; i < tags.length; i++){
+  for (var i = 0; i < tags.length; i++){
     console.log(tags[i]);
     spins.push(
       function(i) {
@@ -721,14 +721,14 @@ function compareDomainScore(a,b) {
 function getImageTags(imageURL){
   var host = "api.projectoxford.ai";
   var endpoint = "/vision/v1.0/describe?"
-  var data = "url="+imageURL+"&maxCandidates=1";
+  var data = "url="+encodeURIComponent(JSON.stringify(imageURL))+"&maxCandidates=1";
 
   imageHttpsReq(
     host,
     endpoint, // config.get('domainSearchHost'),
     data,
     function(rsp){
-      console.log(rsp.toString());
+      console.log(rsp);
       return rsp.description.tags;
   });
 }
