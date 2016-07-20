@@ -218,6 +218,8 @@ function getDomainSpins(senderID, domainSearch){
       if(rsp && rsp.RecommendedDomains && (rsp.RecommendedDomains.length >= 1) ){
         sendTextMessage(senderID, "rec1:"+rsp.RecommendedDomains[0].Fqdn);
         return rsp.RecommendedDomains;
+      }else{
+        return;
       }
     });
 }
