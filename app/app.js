@@ -687,27 +687,30 @@ function receivedImage(event, imageURL) {
   // spins.slice(0,5)
   // sendDomainSpinMessage(senderID, domainArray);
   //
-  var tags = getImageTags(imageURL);
-  var spins = [];
-  for (var i = 0; i < tags.length; i++){
-    console.log(tags[i]);
-    spins.push(
-      function(i) {
-        return getDomainSpins(
+  getImageTags(
+    imageURL,
+    function(rsp){
+      var tags = rsp.description.tags;
+      for (var i = 0; i < tags.length; i++){
+        var spins = [];
+        console.log(tags[i]);
+        getDomainSpins(
           senderID,
           tags[i],
-          function(rsp){}
-        )
+          function(rsp2){
+            // Find the highest ranked spin within the set
+            spins.push(rsp2.RecommendedDomains[0]);
+            spins.sort(compareDomainScore);
+            // this means we are done
+            if (spins.length == tags.length){
+              return sendDomainSpinMessage( senderID, spins.slice(0,5) );
+            }
+          }
+        );
       }
-    );
-  }
-
-  spins = [];
-  spins.sort(compareDomainScore);
-  spins.slice(0,5);
-  console.log(spins);
-  console.log(spins);
-  sendDomainSpinMessage(senderID, spins);
+      console.log('inceptions:'+spins);
+    }
+  );
 }
 
 function compareDomainScore(a,b) {
@@ -718,19 +721,19 @@ function compareDomainScore(a,b) {
   return 0;
 }
 
-function getImageTags(imageURL){
+function getImageTags(imageURL, callbackFN){
   var host = "api.projectoxford.ai";
   var endpoint = "/vision/v1.0/describe?"
   var data = {url: imageURL, maxCandidates:1};
 
-  imageHttpsReq(
+  return imageHttpsReq(
     host,
     endpoint, // config.get('domainSearchHost'),
     "POST",
     data,
     function(rsp){
       console.log(rsp);
-      return rsp.description.tags;
+      callbackFN;
   });
 }
 
