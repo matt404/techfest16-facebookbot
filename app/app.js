@@ -185,13 +185,35 @@ function searchDomainAvailability(senderID, domainSearch){
         if(rsp.ExactMatchDomain.IsAvailable){
           sendDomainBuyMessage(senderID, domainSearch, rsp.ExactMatchDomain.ProductId, rsp.Products[0].PriceInfo.ListPriceDisplay, rsp.Products[0].PriceInfo.PromoRegLengthFlag, rsp.Products[0].PriceInfo.CurrentPriceDisplay);
         }else{
-          var messageText = "Sorry, "+domainSearch+" is not available.";
-          sendTextMessage(senderID, messageText);
+          var domainSpins = getDomainSpins(recipientId, domainSearch);
+          if( !domainSpins ){
+            return;
+          }
+          sendDomainSpinMessage(recipientId, domainSearch, domainSpins, pfid);
         }
       }
     });
 
 }
+
+function getDomainSpins(senderID, domainSearch){
+  var pagesize = 3;
+  var domainSpinQS = "pagesize="+pagesize+"&q="+domainSpin+"&key=dpp_search";
+
+  httpsReq(
+    config.get('domainSearchHost'),
+    config.get('domainSpinPath'),
+    "GET",
+    domainSpinQS,
+    function(rsp){
+      if(rsp && rsp.RecommendedDomains && rsp.RecommendedDomains.length >= 1 ){
+        return rsp.RecommendedDomains;
+      } else {
+        return;
+      };
+    });
+}
+
 
 function httpsReq(host, endpoint, method, data, success) {
   var dataString = JSON.stringify(data);
@@ -231,6 +253,43 @@ function httpsReq(host, endpoint, method, data, success) {
 
   req.write(dataString);
   req.end();
+}
+
+function sendDomainSpinMessage(recipientId, domainSearch, domainArray, pfid) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: []
+        }
+      }
+    }
+  };
+
+  for(var i = 0; i < domainArray.length; i++) {
+      var currentDomain = domainArray[i].Fqdn;
+      var qstring = "?pfid="+pfid+"&domain="+currentDomain+"&senderid="+recipientId;
+
+      var currentDomainItem = {
+        title: currentDomain,
+        subtitle: "Price stuff here",
+        item_url: config.get('cartURL') + qstring,
+        buttons: [{
+          type: "web_url",
+          url: config.get('cartURL') + qstring,
+          title: "Add to Cart"
+        }],
+      };
+
+      messageData.message.attachment.payload.elements.push(currentDomainItem);
+  };
+
+  callSendAPI(messageData);
 }
 
 
