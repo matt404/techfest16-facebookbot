@@ -202,7 +202,7 @@ function searchDomainAvailability(senderID, domainSearch){
 
 function getDomainSpins(senderID, domainSearch){
   var pagesize = 3;
-  var domainSpinQS = "pagesize="+pagesize+"&q="+domainSearch+"&key=dpp_search";
+  var domainSpinQS = "pagestart=0&pagesize="+pagesize+"&q="+domainSearch+"&key=dpp_search";
 
   httpsReq(
     config.get('domainSearchHost'),
@@ -212,7 +212,7 @@ function getDomainSpins(senderID, domainSearch){
     function(rsp){
       sendTextMessage(senderID, rsp.RecommendedDomains[0].Fqdn);
       sendTextMessage(senderID, "length spin array"+rsp.RecommendedDomains.length);
-      if(rsp && rsp.RecommendedDomains && rsp.RecommendedDomains.length >= 1 ){
+      if(rsp && rsp.RecommendedDomains && (rsp.RecommendedDomains.length >= 1) ){
         return rsp.RecommendedDomains;
       } else {
         return;
