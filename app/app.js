@@ -733,7 +733,7 @@ function getImageTags(imageURL, callbackFN){
     data,
     function(rsp, callbackFN){
       console.log(rsp);
-      callbackFN;
+      callbackFN(rsp);
   });
 }
 
