@@ -694,10 +694,6 @@ function receivedImage(event, imageURL) {
       tags.sort(compareTagConfidence);
       for (var i = 0; i < tags.length; i++){
         console.log(tags[i]);
-        if (tags.confidence < 0.9){
-          console.log("skipping: "+tags[i].name);
-          continue;
-        }
         var spins = [];
         getDomainSpins(
           senderID,
@@ -738,7 +734,7 @@ function compareDomainScore(a,b) {
 
 function getImageTags(imageURL, callbackFN){
   var host = "api.projectoxford.ai";
-  var endpoint = "/vision/v1.0/tag?"
+  var endpoint = "/vision/v1.0/tag"
   var data = {url: imageURL};
 
   return imageHttpsReq(
