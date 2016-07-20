@@ -703,7 +703,7 @@ function receivedImage(event, imageURL) {
             spins.sort(compareDomainScore);
             // this means we are done
             if (spins.length == tags.length){
-              return sendDomainSpinMessage( senderID, spins.slice(0,5) );
+              return sendDomainSpinMessage( senderID, spins.slice(0,7) );
             }
           }
         );
