@@ -248,12 +248,13 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, price) {
       attachment: {
         type: "template",
         payload: {
-          template_type: "button",
-          text: "<b>YES</b>, "+domainSearch+" is available! Plans starting from " +price+ "!",
+          template_type: "generic",
+          image_url: SERVER_URL + "/assets/product_domains.png",
+          text: "YES, "+domainSearch+" is available! Plans starting from " +price+ "!",
           buttons:[{
             type: "web_url",
             url: config.get('cartURL') + qstring,
-            title: "Buy Domain"
+            title: "Add to Cart"
           }, {
             type: "postback",
             title: "Search Similar",
