@@ -720,11 +720,7 @@ function compareDomainScore(a,b) {
 
 function getImageTags(imageURL){
   var endpoint = "https://api.projectoxford.ai/vision/v1.0/describe?"
-  var data =
-  {
-    maxCandidates: 3,
-    url: imageURL
-  }
+  var data = "url="+imageURL+"&maxCandidates="+maxCandidates
 
   imageHttpsReq(
     endpoint, // config.get('domainSearchHost'),
