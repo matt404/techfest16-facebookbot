@@ -687,29 +687,27 @@ function receivedImage(event, imageURL) {
   // spins.slice(0,5)
   // sendDomainSpinMessage(senderID, domainArray);
   //
-  var funtimes = (function(){
-    var tags = getImageTags(imageURL);
-    var spins = [];
-    for (i = 0; i < tags.length; i++){
-      console.log(tags[i]);
-      spins.push(
-        function(i) {
-          return getDomainSpins(
-            senderID,
-            tags[i],
-            function(rsp){}
-          )
-        }
-      );
-    }
+  var tags = getImageTags(imageURL);
+  var spins = [];
+  for (i = 0; i < tags.length; i++){
+    console.log(tags[i]);
+    spins.push(
+      function(i) {
+        return getDomainSpins(
+          senderID,
+          tags[i],
+          function(rsp){}
+        )
+      }
+    );
+  }
 
-    spins = [];
-    spins.sort(compareDomainScore);
-    spins.slice(0,5);
-    console.log(spins);
-    console.log(spins);
-    sendDomainSpinMessage(senderID, spins);
-  });
+  spins = [];
+  spins.sort(compareDomainScore);
+  spins.slice(0,5);
+  console.log(spins);
+  console.log(spins);
+  sendDomainSpinMessage(senderID, spins);
 }
 
 function compareDomainScore(a,b) {
