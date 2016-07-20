@@ -675,7 +675,8 @@ function receivedImage(event, imageURL) {
   // The 'payload' param is a developer-defined field which is set in a postback
   // button for Structured Messages.
 
-
+  sendTextMessage(senderID, "Thanks, processing your image...");
+  sendTypingOn(senderID);
   console.log("Received image for user %d and page %d with image '%s'" , senderID, recipientID, imageURL);
 
   // When an image is sent, we'll try to search for spins
@@ -705,6 +706,7 @@ function receivedImage(event, imageURL) {
             spins.sort(compareDomainScore);
             // this means we are done
             if (spins.length == tags.length){
+              sendTypingOff(senderID);
               return sendDomainSpinMessage( senderID, spins.slice(0,7) );
             }
           }
