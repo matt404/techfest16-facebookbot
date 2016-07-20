@@ -280,6 +280,50 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, length
 }
 
 
+/*
+ * Send a order confirmation for the domain using the Send API.
+ *
+ */
+function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, lengthFlag, currentPrice) {
+  var qstring = "?pfid="+pfid+"&domain="+domainSearch+"&senderid="+recipientId
+  var subTitleText = listPrice+ "/yr"
+  if (lengthFlag > 0) {
+    subTitleText += "\n\r— Multi-year sale: "+currentPrice+" for 1st year."
+  }
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "generic",
+          elements: [{
+            title: domainSearch,
+            subtitle: subTitleText,
+            image_url: SERVER_URL + "/assets/product-domains.png",
+            buttons: [{
+              type: "web_url",
+              url: config.get('cartURL') + qstring,
+              title: "Add to Cart"
+            }, {
+              type: "postback",
+              title: "Search Similar",
+              payload: "DEVELOPED_DEFINED_PAYLOAD"
+            }, {
+              type: "phone_number",
+              title: "Give Us A Call",
+              payload: "+14805058877"
+            }]
+          }]
+        }
+      }
+    }
+  };
+
+  callSendAPI(messageData);
+}
 /**********************************************************
 ***********************************************************
 ***********************************************************
@@ -450,6 +494,10 @@ function receivedMessage(event) {
 
         case 'read receipt':
           sendReadReceipt(senderID);
+          break;
+
+        case 'help':
+          sendTextMessage(senderID, "Type in a domain and see if it's available!")
           break;
 
         case 'typing on':
