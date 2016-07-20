@@ -713,6 +713,7 @@ function receivedImage(event, imageURL) {
     console.log(spins);
     console.log(spins);
     sendDomainSpinMessage(senderID, spins);
+  };
 }
 
 function getImageTags(imageURL){
