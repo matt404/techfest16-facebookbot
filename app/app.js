@@ -190,7 +190,7 @@ function searchDomainAvailability(senderID, domainSearch){
             domainSearch,
             function(rsp){
               var domainSpins = rsp.RecommendedDomains;
-              sendTextMessage(senderID, "Sorry, "+domainSearch+" is not available. Would you like one of these instead?"); 
+              sendTextMessage(senderID, "Sorry, "+domainSearch+" is not available. Would you like one of these instead?");
               if( domainSpins ){
                 sendDomainSpinMessage(senderID, domainSearch, domainSpins);
               }else{
@@ -204,7 +204,7 @@ function searchDomainAvailability(senderID, domainSearch){
 }
 
 function getDomainSpins(senderID, domainSearch, callbackFn){
-  var pagesize = 3;
+  var pagesize = 7;
   var domainSpinQS = "pagestart=0&pagesize="+pagesize+"&q="+domainSearch+"&key=dpp_search";
 
   httpsReq(
