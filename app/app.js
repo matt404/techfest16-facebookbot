@@ -700,7 +700,15 @@ function receivedImage(event, imageURL) {
         ));
       };
     };
-    spins.sort();
+    function compareDomainScore(a,b) {
+      if (a.RecommendedDomains.DomainScore < b.RecommendedDomains.DomainScore)
+        return -1;
+      if (a.RecommendedDomains.DomainScore > b.RecommendedDomains.DomainScore)
+        return 1;
+      return 0;
+    };
+
+    spins.sort(compareDomainScore);
     spins.slice(0,5);
     console.log(spins);
     console.log(spins);
