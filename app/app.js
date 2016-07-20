@@ -111,13 +111,6 @@ app.post('/webhook', function (req, res) {
           receivedMessageRead(messagingEvent);
         } else if (messagingEvent.account_linking) {
           receivedAccountLink(messagingEvent);
-        } else if (messagingEvent.message.attachments){
-          //Checking if there are any image attachments
-          if(atts[0].type === "image"){
-           var imageURL = atts[0].payload.url;
-           console.log(imageURL);
-           receivedImage(messagingEvent, imageURL);
-          }
         } else {
           console.log("Webhook received unknown messagingEvent: ", messagingEvent);
         }
@@ -589,7 +582,16 @@ function receivedMessage(event) {
     }
 
   } else if (messageAttachments) {
-    sendTextMessage(senderID, "Message with attachment received");
+    if (event.message.attachments){
+      //Checking if there are any image attachments
+      if(atts[0].type === "image"){
+       var imageURL = atts[0].payload.url;
+       console.log(imageURL);
+       receivedImage(messagingEvent, imageURL);
+      }
+    } else {
+      sendTextMessage(senderID, "Message with attachment received");
+    }
   }
 }
 
