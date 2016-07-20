@@ -280,7 +280,7 @@ function sendDomainSpinMessage(recipientId, domainArray) {
 
       var currentDomainItem = {
         title: currentDomain,
-        subtitle: "Price stuff here",
+        subtitle: "",
         item_url: config.get('cartURL') + qstring,
         buttons: [{
           type: "web_url",
