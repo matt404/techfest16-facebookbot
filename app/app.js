@@ -205,7 +205,7 @@ function searchDomainAvailability(senderID, domainSearch){
 
 }
 
-function getDomainSpins(senderID, domainSearch){
+function getDomainSpins(senderID, domainSearch, callbackFn){
   var pagesize = 3;
   var domainSpinQS = "pagestart=0&pagesize="+pagesize+"&q="+domainSearch+"&key=dpp_search";
 
@@ -214,14 +214,8 @@ function getDomainSpins(senderID, domainSearch){
     config.get('domainSpinPath'),
     "GET",
     domainSpinQS,
-    function(rsp){
-      if(rsp && rsp.RecommendedDomains && (rsp.RecommendedDomains.length >= 1) ){
-        sendTextMessage(senderID, "rec1:"+rsp.RecommendedDomains[0].Fqdn);
-        return rsp.RecommendedDomains;
-      }else{
-        return;
-      }
-    });
+    callbackFn
+  );
 }
 
 
