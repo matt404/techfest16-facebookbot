@@ -402,7 +402,7 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, length
               url: config.get('cartURL') + qstring,
               title: "Add to Cart"
             }, {
-              type: "text",
+              type: "postback",
               title: "Search Similar",
               payload: "Search Similar: " + domainSearch
             }, {
