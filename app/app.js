@@ -326,7 +326,7 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, length
             }, {
               type: "text",
               title: "Search Similar",
-              payload: "Search Similar: "+domainSearch
+              payload: "Search Similar: " + domainSearch
             }, {
               type: "phone_number",
               title: "Give Us A Call",
@@ -402,9 +402,9 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, length
               url: config.get('cartURL') + qstring,
               title: "Add to Cart"
             }, {
-              type: "postback",
+              type: "text",
               title: "Search Similar",
-              payload: "DEVELOPED_DEFINED_PAYLOAD"
+              payload: "Search Similar: " + domainSearch
             }, {
               type: "phone_number",
               title: "Talk to Support",
