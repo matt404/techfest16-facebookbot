@@ -450,7 +450,10 @@ function receivedMessage(event) {
       var domainSearch = found[0];
       searchDomainAvailability(senderID, domainSearch);
 
-    }else{
+    }else if (messageText.toLowerCase() == hello || messageText.toLowerCase() == hi){
+      sendTextMessage(senderID, "Hi! I'll help you find a domain. Type one and let's see if it's available!")
+    }
+    else{
 
       // If we receive a text message, check to see if it matches any special
       // keywords and send back the corresponding example. Otherwise, just echo
