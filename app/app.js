@@ -252,7 +252,7 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, price) {
           elements: [{
             title: domainSearch,
             subtitle: "Plans starting from " +price+ "!",
-            image_url: SERVER_URL + "/assets/product_domains.png",
+            image_url: SERVER_URL + "/assets/product-domains.png",
             buttons: [{
               type: "web_url",
               url: config.get('cartURL') + qstring,
