@@ -697,23 +697,26 @@ function receivedImage(event, imageURL) {
             senderID,
             tags[i],
             function(rsp){}
-        ));
-      };
-    };
-    function compareDomainScore(a,b) {
-      if (a.RecommendedDomains.DomainScore < b.RecommendedDomains.DomainScore)
-        return -1;
-      if (a.RecommendedDomains.DomainScore > b.RecommendedDomains.DomainScore)
-        return 1;
-      return 0;
-    };
+          )
+        }
+      );
+    }
 
+    spins = [];
     spins.sort(compareDomainScore);
     spins.slice(0,5);
     console.log(spins);
     console.log(spins);
     sendDomainSpinMessage(senderID, spins);
-  };)
+  })
+}
+
+function compareDomainScore(a,b) {
+  if (a.RecommendedDomains.DomainScore < b.RecommendedDomains.DomainScore)
+    return -1;
+  if (a.RecommendedDomains.DomainScore > b.RecommendedDomains.DomainScore)
+    return 1;
+  return 0;
 }
 
 function getImageTags(imageURL){
@@ -737,7 +740,7 @@ function imageHttpsReq(host, endpoint, data, success) {
 
   var headers = {
     'Content-Type': 'application/json',
-    'Content-Length': dataString.length
+    'Content-Length': dataString.length,
     'ocp-apim-subscription-key': '7bb37f55e5244f1ca61695e8de36042c'
   };
 
