@@ -724,7 +724,7 @@ function compareDomainScore(a,b) {
 function getImageTags(imageURL, callbackFN){
   var host = "api.projectoxford.ai";
   var endpoint = "/vision/v1.0/describe?"
-  var data = {url: imageURL, maxCandidates:1};
+  var data = {url: imageURL, maxCandidates:3};
 
   return imageHttpsReq(
     host,
