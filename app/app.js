@@ -671,14 +671,12 @@ function receivedPostback(event) {
 function receivedImage(event, imageURL) {
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
-  var timeOfImage = event.timestamp;
 
   // The 'payload' param is a developer-defined field which is set in a postback
   // button for Structured Messages.
 
 
-  console.log("Received image for user %d and page %d with image '%s' " +
-    "at %d", senderID, recipientID, imageURL, timeOfPostback);
+  console.log("Received image for user %d and page %d with image '%s'" , senderID, recipientID, imageURL, timeOfPostback);
 
   // When an image is sent, we'll try to search for spins
   // getImageTags();
