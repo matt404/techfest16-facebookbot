@@ -192,7 +192,7 @@ function searchDomainAvailability(senderID, domainSearch){
               var domainSpins = rsp.RecommendedDomains;
               sendTextMessage(senderID, "domainspins:"+domainSpins[0].Fqdn); // debug
               if( domainSpins ){
-                sendDomainSpinMessage(senderID, domainSearch, domainSpins, pfid);
+                sendDomainSpinMessage(senderID, domainSearch, domainSpins);
               }else{
                 // debug
                 sendTextMessage(senderID, "no domain spins");
@@ -259,7 +259,7 @@ function httpsReq(host, endpoint, method, data, success) {
   req.end();
 }
 
-function sendDomainSpinMessage(recipientId, domainSearch, domainArray, pfid) {
+function sendDomainSpinMessage(recipientId, domainSearch, domainArray) {
   var messageData = {
     recipient: {
       id: recipientId
@@ -277,6 +277,7 @@ function sendDomainSpinMessage(recipientId, domainSearch, domainArray, pfid) {
 
   for(var i = 0; i < domainArray.length; i++) {
       var currentDomain = domainArray[i].Fqdn;
+      var pfid = domainArray[i].ProductId;
       var qstring = "?pfid="+pfid+"&domain="+currentDomain+"&senderid="+recipientId;
 
       var currentDomainItem = {
