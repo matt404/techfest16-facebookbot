@@ -5,55 +5,23 @@
 </head>
 
 <body>
-<div class="container">
-
-    <form method="post" action="https://cart.godaddy.com/upp/vcart" name="inapp">
-  <textarea name="postData" cols="80" rows="20" style="display:none;">
-{
-  "cart": {
-    "items": [
-    {
-      "pfid": <%= pfid %>,
-      "quantity": 1,
-      "metadata": {
-        "domains": [
-          {
-            "domain": "<%= domain %>",
-            "nameServers": [
-              "ns13.domaincontrol.com",
-              "ns14.domaincontrol.com"
-            ],
-            "renewAuto": true,
-            "inheritContacts": true
-          }
-        ]
-      }
-    }
-    ],
-    "tracking": {
-      "itemTrackingCode": "inapp",
-      "clientIp": "64.202.160.73"
-    }
-  },
-  "navigation": {
-    "manageProduct": {
-      "isHidden": false,
-      "app": "hackaton",
-      "path": "<%= path %>",
-      "buttonText": "Go Back"
-    }
-  }
-}
-  </textarea>
-    </form>
-
     <script>
         window.onload = function () {
-            document.forms['inapp'].submit()
+          function reqListener () {
+            console.log(this.responseText);
+          }
+
+
+          var url = "https://www.godaddy.com/api/dpp/searchresultscart/13?applyBP=1&domain=" + "<%= domain %>" + "&domainstatus=available&displayarea=dppsr_extnd_avail&bundle=domain"
+          console.log(url)
+          var oReq = new XMLHttpRequest();
+          oReq.addEventListener("load", reqListener);
+          oReq.open("POST", url);
+          oReq.send();
         }
     </script>
 
-</div> <!-- /container -->
+</div>
 
 </body>
 

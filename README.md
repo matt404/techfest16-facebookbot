@@ -20,6 +20,11 @@
 8. Open the messenger and chat away!
 
 ## Additional Notes
+ To enable the redirect from in app back to the bot in your development environment
+ add this line to your /etc/host file:
+   
+      127.0.0.1    hackaton.godaddy.com
+      
  APIs to Integrate with:
  - Domain Search
  -- https://www.godaddy.com/domainsapi/v1/search/exact?q=bottertesticon.com&key=dpp_search&pc=&ptl=
