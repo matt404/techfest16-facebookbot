@@ -241,7 +241,7 @@ function httpsReq(host, endpoint, method, data, success) {
 function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, lengthFlag, currentPrice) {
   var os = require("os");
   var qstring = "?pfid="+pfid+"&domain="+domainSearch+"&senderid="+recipientId
-  var subTitleText = listPrice+ "/yr"
+  var subTitleText = listPrice+ "/yr" + os.EOL
   if (lengthFlag > 0) {
     subTitleText += os.EOL + "Discount pricing for multi-year registration: "+currentPrice+" for the first year."
   }
