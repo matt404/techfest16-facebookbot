@@ -676,7 +676,7 @@ function receivedImage(event, imageURL) {
   // button for Structured Messages.
 
 
-  console.log("Received image for user %d and page %d with image '%s'" , senderID, recipientID, imageURL, timeOfPostback);
+  console.log("Received image for user %d and page %d with image '%s'" , senderID, recipientID, imageURL);
 
   // When an image is sent, we'll try to search for spins
   // getImageTags();
