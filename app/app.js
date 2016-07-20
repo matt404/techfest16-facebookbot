@@ -190,12 +190,10 @@ function searchDomainAvailability(senderID, domainSearch){
             domainSearch,
             function(rsp){
               var domainSpins = rsp.RecommendedDomains;
-              sendTextMessage(senderID, "domainspins:"+domainSpins[0].Fqdn); // debug
+              sendTextMessage(senderID, "Sorry, "+domainSearch+" is not available. Would you like one of these instead?"); 
               if( domainSpins ){
                 sendDomainSpinMessage(senderID, domainSearch, domainSpins);
               }else{
-                // debug
-                sendTextMessage(senderID, "no domain spins");
                 return;
               }
           });
