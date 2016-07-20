@@ -326,7 +326,7 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, length
             }, {
               type: "text",
               title: "Search Similar",
-              payload: "Search Similar: " + domainSearch
+              payload: domainSearch
             }, {
               type: "phone_number",
               title: "Give Us A Call",
@@ -404,7 +404,7 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, listPrice, length
             }, {
               type: "postback",
               title: "Search Similar",
-              payload: "Search Similar: " + domainSearch
+              payload: domainSearch
             }, {
               type: "phone_number",
               title: "Talk to Support",
@@ -681,15 +681,15 @@ function receivedPostback(event) {
 
   // When a postback is called, we'll send a message back to the sender to
   // let them know it was successful
-  var domainSearch = /([a-zA-Z0-9]+\.[a-zA-Z]+)/;
+  var domainMatch = /([a-zA-Z0-9]+\.[a-zA-Z]+)/;
   if (payload.match(domainMatch)){
     getDomainSpins(
       senderID,
-      domainSearch,
+      payload,
       function(rsp){
-        var domainSpins = rsp.RecommendedDomains;
-        if( domainSpins ){
-          sendDomainSpinMessage(senderID, domainSearch, domainSpins);
+        var payload = rsp.RecommendedDomains;
+        if( payload ){
+          sendDomainSpinMessage(senderID, domainSearch, payload);
         }else{
           sendTextMessage(senderID, "Sorry could not find similar domains");
         }
