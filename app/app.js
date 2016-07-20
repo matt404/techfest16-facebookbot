@@ -211,6 +211,7 @@ function getDomainSpins(senderID, domainSearch){
     domainSpinQS,
     function(rsp){
       sendTextMessage(senderID, rsp.RecommendedDomains[0].Fqdn);
+      sendTextMessage(senderID, "length spin array"+rsp.RecommendedDomains.length);
       if(rsp && rsp.RecommendedDomains && rsp.RecommendedDomains.length >= 1 ){
         return rsp.RecommendedDomains;
       } else {
