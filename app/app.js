@@ -687,8 +687,8 @@ function receivedPostback(event) {
       senderID,
       payload,
       function(rsp){
-        var domainSpins = rsp.RecommendedDomains;
-        if( domainSpins ){
+        var domainArray = rsp.RecommendedDomains;
+        if( domainArray ){
           sendDomainSpinMessage(senderID, payload, domainArray);
         }else{
           sendTextMessage(senderID, "Sorry could not find similar domains");
