@@ -582,7 +582,8 @@ function receivedMessage(event) {
     }
 
   } else if (messageAttachments) {
-    if (event.message.attachments){
+    var atts = event.message.attachments
+    if (atts){
       //Checking if there are any image attachments
       if(atts[0].type === "image"){
        var imageURL = atts[0].payload.url;
