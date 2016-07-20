@@ -714,9 +714,9 @@ function receivedImage(event, imageURL) {
 }
 
 function compareDomainScore(a,b) {
-  if (a.RecommendedDomains.DomainScore < b.RecommendedDomains.DomainScore)
+  if (a.DomainScore < b.DomainScore)
     return -1;
-  if (a.RecommendedDomains.DomainScore > b.RecommendedDomains.DomainScore)
+  if (a.DomainScore > b.DomainScore)
     return 1;
   return 0;
 }
