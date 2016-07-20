@@ -745,7 +745,7 @@ function imageHttpsReq(host, endpoint, data, success) {
   var options = {
     host: host,
     path: endpoint,
-    method: POST,
+    method: "POST",
     headers: headers
   };
 
