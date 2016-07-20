@@ -249,20 +249,23 @@ function sendDomainBuyMessage(recipientId, domainSearch, pfid, price) {
         type: "template",
         payload: {
           template_type: "generic",
-          image_url: SERVER_URL + "/assets/product_domains.png",
-          text: "YES, "+domainSearch+" is available! Plans starting from " +price+ "!",
-          buttons:[{
-            type: "web_url",
-            url: config.get('cartURL') + qstring,
-            title: "Add to Cart"
-          }, {
-            type: "postback",
-            title: "Search Similar",
-            payload: "DEVELOPED_DEFINED_PAYLOAD"
-          }, {
-            type: "phone_number",
-            title: "Give Us A Call",
-            payload: "+14805058877"
+          elements: [{
+            title: "YES, "+domainSearch+" is available!",
+            subtitle: "Plans starting from " +price+ "!",
+            image_url: SERVER_URL + "/assets/product_domains.png",
+            buttons: [{
+              type: "web_url",
+              url: config.get('cartURL') + qstring,
+              title: "Add to Cart"
+            }, {
+              type: "postback",
+              title: "Search Similar",
+              payload: "DEVELOPED_DEFINED_PAYLOAD"
+            }, {
+              type: "phone_number",
+              title: "Give Us A Call",
+              payload: "+14805058877"
+            }]
           }]
         }
       }
