@@ -11,19 +11,19 @@
 'use strict';
 
 const
-  bodyParser = require('body-parser'),
-  config = require('config'),
-  crypto = require('crypto'),
-  express = require('express'),
-  https = require('https'),
-  request = require('request'),
-  NodeCache = require('node-cache');
+    bodyParser = require('body-parser'),
+    config = require('config'),
+    crypto = require('crypto'),
+    express = require('express'),
+    https = require('https'),
+    request = require('request'),
+    NodeCache = require('node-cache');
 
-var nCache = new NodeCache( { stdTTL: 100, checkperiod: 120 } );
+var nCache = new NodeCache({stdTTL: 100, checkperiod: 120});
 var app = express();
 app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
-app.use(bodyParser.json({ verify: verifyRequestSignature }));
+app.use(bodyParser.json({verify: verifyRequestSignature}));
 app.use(express.static('public'));
 
 /*
@@ -32,29 +32,29 @@ app.use(express.static('public'));
  *
  */
 
- const URL_DOMAIN_SEARCH = "https://www.godaddy.com/domainsapi/v1/search/exact?key=dpp_search&pc=&ptl=&q=bottertesticon.com";
- const URL_CART = "https://cart.godaddy.com/upp/vcart#/";
+const URL_DOMAIN_SEARCH = "https://www.godaddy.com/domainsapi/v1/search/exact?key=dpp_search&pc=&ptl=&q=bottertesticon.com";
+const URL_CART = "https://cart.godaddy.com/upp/vcart#/";
 
 // App Secret can be retrieved from the App Dashboard
 const APP_SECRET = (process.env.MESSENGER_APP_SECRET) ?
-  process.env.MESSENGER_APP_SECRET :
-  config.get('appSecret');
+    process.env.MESSENGER_APP_SECRET :
+    config.get('appSecret');
 
 // Arbitrary value used to validate a webhook
 const VALIDATION_TOKEN = (process.env.MESSENGER_VALIDATION_TOKEN) ?
-  (process.env.MESSENGER_VALIDATION_TOKEN) :
-  config.get('validationToken');
+    (process.env.MESSENGER_VALIDATION_TOKEN) :
+    config.get('validationToken');
 
 // Generate a page access token for your page from the App Dashboard
 const PAGE_ACCESS_TOKEN = (process.env.MESSENGER_PAGE_ACCESS_TOKEN) ?
-  (process.env.MESSENGER_PAGE_ACCESS_TOKEN) :
-  config.get('pageAccessToken');
+    (process.env.MESSENGER_PAGE_ACCESS_TOKEN) :
+    config.get('pageAccessToken');
 
 // URL where the app is running (include protocol). Used to point to scripts and
 // assets located at this address.
 const SERVER_URL = (process.env.SERVER_URL) ?
-  (process.env.SERVER_URL) :
-  config.get('serverURL');
+    (process.env.SERVER_URL) :
+    config.get('serverURL');
 
 if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
   console.error("Missing config values");
@@ -66,11 +66,11 @@ if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
  * setup is the same token used here.
  *
  */
-app.get('/webhook', function(req, res) {
+app.get('/webhook', function (req, res) {
   if (req.query['hub.mode'] === 'subscribe' &&
       req.query['hub.verify_token'] === VALIDATION_TOKEN) {
-        console.log(req);
-        console.log("Validating webhook");
+    console.log(req);
+    console.log("Validating webhook");
     res.status(200).send(req.query['hub.challenge']);
   } else {
     console.error("Failed validation. Make sure the validation tokens match.");
@@ -93,12 +93,12 @@ app.post('/webhook', function (req, res) {
   if (data.object == 'page') {
     // Iterate over each entry
     // There may be multiple if batched
-    data.entry.forEach(function(pageEntry) {
+    data.entry.forEach(function (pageEntry) {
       var pageID = pageEntry.id;
       var timeOfEvent = pageEntry.time;
 
       // Iterate over each messaging event
-      pageEntry.messaging.forEach(function(messagingEvent) {
+      pageEntry.messaging.forEach(function (messagingEvent) {
         if (messagingEvent.optin) {
           receivedAuthentication(messagingEvent);
         } else if (messagingEvent.message) {
@@ -130,7 +130,7 @@ app.post('/webhook', function (req, res) {
  * (sendAccountLinking) is pointed to this URL.
  *
  */
-app.get('/authorize', function(req, res) {
+app.get('/authorize', function (req, res) {
   var accountLinkingToken = req.query['account_linking_token'];
   var redirectURI = req.query['redirect_uri'];
 
@@ -149,47 +149,89 @@ app.get('/authorize', function(req, res) {
 });
 
 
-
 /**********************************************************
--- START CUSTOM Code
-***********************************************************
-***********************************************************
-**********************************************************/
+ -- START CUSTOM Code
+ ***********************************************************
+ ***********************************************************
+ **********************************************************/
 
-app.get('/buy-domain', function(req, res) {
+app.get('/buy-domain', function (req, res) {
   var pfid = req.query['pfid'];
   var domain = req.query['domain'];
   var senderId = req.query['senderId'];
-  var path = encodeURIComponent("/send-message" + "?domain=" + domain +"&senderId=" + senderId);
+  var fakeCart = req.query['fakeCart'];
+
+  var app = "hackaton";
+  var path = encodeURIComponent("/send-confirmation" + "?domain=" + domain + "&senderId=" + senderId);
+
+  if (fakeCart === '1') {
+    sendOrderConfirmation(senderId, "1111", domain);
+    return;
+  }
 
   res.render('buy-domain', {
     pfid: pfid,
     domain: domain,
     senderId: senderId,
+    app: app,
     path: path
   });
 });
 
+app.get('/send-confirmation', function (req, res) {
+  // Respond to client to unblock it
+  res.sendStatus(200);
 
-function searchDomainAvailability(senderID, domainSearch){
+  // Make callback to bot with the order confirmation data
+  var orderId = req.query['orderId'];
+  var domain = req.query['domain'];
+  var senderId = req.query['senderId'];
 
-  var domainSearchQS = "q="+domainSearch+"&key=dpp_search";
+  sendOrderConfirmation(senderId, orderId, domain);
+});
 
-  httpsReq(
-    config.get('domainSearchHost'),
-    config.get('domainSearchPath'),
-    "GET",
-    domainSearchQS,
-    function(rsp){
-      if(rsp && rsp.ExactMatchDomain){
-        if(rsp.ExactMatchDomain.IsAvailable){
-          sendDomainBuyMessage(senderID, domainSearch);
-        }else{
-          var messageText = "Sorry, "+domainSearch+" is not available.";
-          sendTextMessage(senderID, messageText);
+function sendOrderConfirmation(senderId, orderId, domain) {
+  var messageData = {
+    recipient: {
+      id: senderId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "button",
+          text: "YES, " + domain + " has been successfully bough! OrderId: " + orderId,
+          buttons: [{
+            type: "web_url",
+            url: config.get('cartURL'),
+            title: "Tell your friends"
+          }
+          ]
         }
       }
-    });
+    }
+  };
+
+  callSendAPI(messageData);
+}
+function searchDomainAvailability(senderID, domainSearch) {
+  var domainSearchQS = "q=" + domainSearch + "&key=dpp_search";
+
+  httpsReq(
+      config.get('domainSearchHost'),
+      config.get('domainSearchPath'),
+      "GET",
+      domainSearchQS,
+      function (rsp) {
+        if (rsp && rsp.ExactMatchDomain) {
+          if (rsp.ExactMatchDomain.IsAvailable) {
+            sendDomainBuyMessage(senderID, domainSearch);
+          } else {
+            var messageText = "Sorry, " + domainSearch + " is not available.";
+            sendTextMessage(senderID, messageText);
+          }
+        }
+      });
 
 }
 
@@ -213,16 +255,16 @@ function httpsReq(host, endpoint, method, data, success) {
     headers: headers
   };
 
-  var req = https.request(options, function(res) {
+  var req = https.request(options, function (res) {
     res.setEncoding('utf-8');
 
     var responseString = '';
 
-    res.on('data', function(data) {
+    res.on('data', function (data) {
       responseString += data;
     });
 
-    res.on('end', function() {
+    res.on('end', function () {
       //console.log(responseString);
       var responseObject = JSON.parse(responseString);
       success(responseObject);
@@ -248,8 +290,8 @@ function sendDomainBuyMessage(recipientId, domainSearch) {
         type: "template",
         payload: {
           template_type: "button",
-          text: "YES, "+domainSearch+" is available!",
-          buttons:[{
+          text: "YES, " + domainSearch + " is available!",
+          buttons: [{
             type: "web_url",
             url: config.get('cartURL'),
             title: "Buy Domain"
@@ -284,8 +326,8 @@ function sendDomainBuyMessage(recipientId, domain) {
         type: "template",
         payload: {
           template_type: "button",
-          text: "YES, "+domain+" is your!",
-          buttons:[{
+          text: "YES, " + domain + " is your!",
+          buttons: [{
             type: "web_url",
             url: config.get('cartURL'),
             title: "Buy Domain"
@@ -307,12 +349,11 @@ function sendDomainBuyMessage(recipientId, domain) {
 }
 
 
-
 /**********************************************************
-***********************************************************
-***********************************************************
-- END CUSTOM Code
-**********************************************************/
+ ***********************************************************
+ ***********************************************************
+ - END CUSTOM Code
+ **********************************************************/
 
 
 
@@ -337,8 +378,8 @@ function verifyRequestSignature(req, res, buf) {
     var signatureHash = elements[1];
 
     var expectedHash = crypto.createHmac('sha1', APP_SECRET)
-                        .update(buf)
-                        .digest('hex');
+        .update(buf)
+        .digest('hex');
 
     if (signatureHash != expectedHash) {
       throw new Error("Couldn't validate the request signature.");
@@ -367,8 +408,8 @@ function receivedAuthentication(event) {
   var passThroughParam = event.optin.ref;
 
   console.log("Received authentication for user %d and page %d with pass " +
-    "through param '%s' at %d", senderID, recipientID, passThroughParam,
-    timeOfAuth);
+      "through param '%s' at %d", senderID, recipientID, passThroughParam,
+      timeOfAuth);
 
   // When an authentication is received, we'll send a message back to the sender
   // to let them know it was successful.
@@ -396,7 +437,7 @@ function receivedMessage(event) {
   var message = event.message;
 
   console.log("Received message for user %d and page %d at %d with message:",
-    senderID, recipientID, timeOfMessage);
+      senderID, recipientID, timeOfMessage);
   console.log(JSON.stringify(message));
 
   var isEcho = message.is_echo;
@@ -412,12 +453,12 @@ function receivedMessage(event) {
   if (isEcho) {
     // Just logging message echoes to console
     console.log("Received echo for message %s and app %d with metadata %s",
-      messageId, appId, metadata);
+        messageId, appId, metadata);
     return;
   } else if (quickReply) {
     var quickReplyPayload = quickReply.payload;
     console.log("Quick reply for message %s with payload %s",
-      messageId, quickReplyPayload);
+        messageId, quickReplyPayload);
 
     sendTextMessage(senderID, "Quick reply tapped");
     return;
@@ -427,13 +468,13 @@ function receivedMessage(event) {
     var domainMatch = /([a-zA-Z0-9]+\.[a-zA-Z]+)/;
     var found = messageText.match(domainMatch);
 
-    if(found && found.length > 0){
+    if (found && found.length > 0) {
       sendTextMessage(senderID, "Ok, checking availability...");
 
       var domainSearch = found[0];
       searchDomainAvailability(senderID, domainSearch);
 
-    }else{
+    } else {
 
       // If we receive a text message, check to see if it matches any special
       // keywords and send back the corresponding example. Otherwise, just echo
@@ -487,8 +528,8 @@ function receivedMessage(event) {
           sendTypingOff(senderID);
           break;
 
-          case 'account linking':
-          case 'link':
+        case 'account linking':
+        case 'link':
           sendAccountLinking(senderID);
           break;
 
@@ -519,9 +560,9 @@ function receivedDeliveryConfirmation(event) {
   var sequenceNumber = delivery.seq;
 
   if (messageIDs) {
-    messageIDs.forEach(function(messageID) {
+    messageIDs.forEach(function (messageID) {
       console.log("Received delivery confirmation for message ID: %s",
-        messageID);
+          messageID);
     });
   }
 
@@ -546,7 +587,7 @@ function receivedPostback(event) {
   var payload = event.postback.payload;
 
   console.log("Received postback for user %d and page %d with payload '%s' " +
-    "at %d", senderID, recipientID, payload, timeOfPostback);
+      "at %d", senderID, recipientID, payload, timeOfPostback);
 
   // When a postback is called, we'll send a message back to the sender to
   // let them know it was successful
@@ -569,7 +610,7 @@ function receivedMessageRead(event) {
   var sequenceNumber = event.read.seq;
 
   console.log("Received message read event for watermark %d and sequence " +
-    "number %d", watermark, sequenceNumber);
+      "number %d", watermark, sequenceNumber);
 }
 
 /*
@@ -588,7 +629,7 @@ function receivedAccountLink(event) {
   var authCode = event.account_linking.authorization_code;
 
   console.log("Received account link event with for user %d with status %s " +
-    "and auth code %s ", senderID, status, authCode);
+      "and auth code %s ", senderID, status, authCode);
 }
 
 /*
@@ -734,7 +775,7 @@ function sendButtonMessage(recipientId) {
         payload: {
           template_type: "button",
           text: "This is test text",
-          buttons:[{
+          buttons: [{
             type: "web_url",
             url: "https://www.oculus.com/en-us/rift/",
             title: "Open Web URL"
@@ -812,13 +853,13 @@ function sendGenericMessage(recipientId) {
  */
 function sendReceiptMessage(recipientId) {
   // Generate a random receipt ID as the API requires a unique ID
-  var receiptId = "order" + Math.floor(Math.random()*1000);
+  var receiptId = "order" + Math.floor(Math.random() * 1000);
 
   var messageData = {
     recipient: {
       id: recipientId
     },
-    message:{
+    message: {
       attachment: {
         type: "template",
         payload: {
@@ -886,19 +927,19 @@ function sendQuickReply(recipientId) {
       metadata: "DEVELOPER_DEFINED_METADATA",
       quick_replies: [
         {
-          "content_type":"text",
-          "title":"Action",
-          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION"
+          "content_type": "text",
+          "title": "Action",
+          "payload": "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_ACTION"
         },
         {
-          "content_type":"text",
-          "title":"Comedy",
-          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY"
+          "content_type": "text",
+          "title": "Comedy",
+          "payload": "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_COMEDY"
         },
         {
-          "content_type":"text",
-          "title":"Drama",
-          "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_DRAMA"
+          "content_type": "text",
+          "title": "Drama",
+          "payload": "DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_DRAMA"
         }
       ]
     }
@@ -973,7 +1014,7 @@ function sendAccountLinking(recipientId) {
         payload: {
           template_type: "button",
           text: "Welcome. Link your account.",
-          buttons:[{
+          buttons: [{
             type: "account_link",
             url: SERVER_URL + "/authorize"
           }]
@@ -993,7 +1034,7 @@ function sendAccountLinking(recipientId) {
 function callSendAPI(messageData) {
   request({
     uri: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: PAGE_ACCESS_TOKEN },
+    qs: {access_token: PAGE_ACCESS_TOKEN},
     method: 'POST',
     json: messageData
 
@@ -1004,10 +1045,10 @@ function callSendAPI(messageData) {
 
       if (messageId) {
         console.log("Successfully sent message with id %s to recipient %s",
-          messageId, recipientId);
+            messageId, recipientId);
       } else {
-      console.log("Successfully called Send API for recipient %s",
-        recipientId);
+        console.log("Successfully called Send API for recipient %s",
+            recipientId);
       }
     } else {
       console.error(response.error);
@@ -1018,7 +1059,7 @@ function callSendAPI(messageData) {
 // Start server
 // Webhooks must be available via SSL with a certificate signed by a valid
 // certificate authority.
-app.listen(app.get('port'), function() {
+app.listen(app.get('port'), function () {
   console.log('Node app is running on port', app.get('port'));
 });
 
